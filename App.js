@@ -37,7 +37,11 @@ import 'react-native-gesture-handler';
 import AppNavigator from './src/navigation/AppNavigator';
 //Theme
 import {useTheme, ThemeProvider, ThemeContext} from './src/theme/themeContext';
+import i18n from 'i18n-js';
+import * as RNLocalize from 'react-native-localize';
+import {en} from './src/i18n/localization';
 
+console.log(RNLocalize.getLocales());
 const persistedReducer = persistReducer(
   {
     key: 'root',
@@ -55,6 +59,11 @@ export const store = createStore(
 );
 
 const persist = persistStore(store);
+
+/// i18n
+i18n.fallbacks = true;
+i18n.translations = {en};
+i18n.locale = RNLocalize.getLocales()[0].languageCode;
 
 const App: () => React$Node = () => {
   return (
