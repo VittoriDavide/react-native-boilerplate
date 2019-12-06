@@ -41,7 +41,40 @@ import i18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
 import {en} from './src/i18n/localization';
 
-console.log(RNLocalize.getLocales());
+//Firebase
+import firebase from '@react-native-firebase/app';
+
+// pluck values from your `GoogleService-Info.plist` you created on the firebase console
+const iosConfig = {
+  clientId: 'x',
+  appId: 'x',
+  apiKey: 'x',
+  databaseURL: 'x',
+  storageBucket: 'x',
+  messagingSenderId: 'x',
+  projectId: 'x',
+
+  // enable persistence by adding the below flag
+  persistence: true,
+};
+
+// pluck values from your `google-services.json` file you created on the firebase console
+const androidConfig = {
+  clientId: 'x',
+  appId: 'x',
+  apiKey: 'x',
+  databaseURL: 'x',
+  storageBucket: 'x',
+  messagingSenderId: 'x',
+  projectId: 'x',
+
+  // enable persistence by adding the below flag
+  persistence: true,
+};
+
+
+
+firebase.initializeApp(iosConfig);
 const persistedReducer = persistReducer(
   {
     key: 'root',
