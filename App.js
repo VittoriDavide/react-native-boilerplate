@@ -36,13 +36,15 @@ import {FeedScreen} from './src/screens/FeedScreen';
 import 'react-native-gesture-handler';
 import AppNavigator from './src/navigation/AppNavigator';
 //Theme
-import {useTheme, ThemeProvider, ThemeContext} from './src/theme/themeContext';
 import i18n from 'i18n-js';
 import * as RNLocalize from 'react-native-localize';
 import {en} from './src/i18n/localization';
-
 //Firebase
 import firebase from '@react-native-firebase/app';
+import {ThemeProvider as MyThemeProvider} from './src/theme/themeContext'
+import { ThemeProvider, Button } from 'react-native-elements';
+
+import theme from './src/theme/theme';
 
 // pluck values from your `GoogleService-Info.plist` you created on the firebase console
 const iosConfig = {
@@ -72,42 +74,39 @@ const androidConfig = {
   persistence: true,
 };
 
-
-
 firebase.initializeApp(iosConfig);
 const persistedReducer = persistReducer(
-  {
-    key: 'root',
-    storage: AsyncStorage,
-    whitelist: ['Auth'],
-  },
+    {
+      key: 'root',
+      storage: AsyncStorage,
+      whitelist: ['Auth'],
+    },
 
-  rootReducer,
+    rootReducer,
 );
 
 export const store = createStore(
-  persistedReducer,
-  {},
-  compose(applyMiddleware(thunk)),
+    persistedReducer,
+    {},
+    compose(applyMiddleware(thunk)),
 );
 
 const persist = persistStore(store);
 
-/// i18n
 i18n.fallbacks = true;
 i18n.translations = {en};
 i18n.locale = RNLocalize.getLocales()[0].languageCode;
 
 const App: () => React$Node = () => {
   return (
-    <ThemeProvider>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persist}>
-          <StatusBar barStyle="dark-content" />
-          <AppNavigator />
-        </PersistGate>
-      </Provider>
-    </ThemeProvider>
+      <ThemeProvider theme={theme('dark')}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persist}>
+            <StatusBar barStyle="light-content" />
+            <AppNavigator />
+          </PersistGate>
+        </Provider>
+      </ThemeProvider>
   );
 };
 

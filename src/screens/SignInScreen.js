@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
+  AsyncStorage, SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -10,14 +10,30 @@ import {
 } from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import {ThemeContext} from '../theme/themeContext';
+import { ThemeContext, withTheme } from 'react-native-elements';
+import ViewElement from '../components/ViewElement';
+import InputLogin from '../components/InputLogin';
+import {Dimensions} from "react-native";
 
-export function SignInScreen() {
-  const {dark, toggle, computedTheme} = useContext(ThemeContext);
+let windowHeight = Dimensions.get('window').height;
+let windowWidth = Dimensions.get('window').width;
+const theme = {
+  Button: {
+    titleStyle: {
+      color: 'red',
+    },
+  },
+};
+
+
+export function SignInScreen(props) {
+  const { theme } = useContext(ThemeContext);
 
   var _signInAsync = async () => {
     await AsyncStorage.setItem('userToken', 'abc');
     //this.props.navigation.navigate('App');
+    console.log(replaceTheme)
+    replaceTheme(theme)
   };
 
   // Set an initilizing state whilst Firebase connects
@@ -39,19 +55,60 @@ export function SignInScreen() {
   }, []);
 
   return (
-    <View style={{width: '100%', height: '100%'}}>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Input
-            placeholder='BASIC INPUT'
-        />
+      <SafeAreaView style={{backgroundColor: theme.colors.secondary}}>
 
-        <Input
-          placeholder="INPUT WITH ICON"
-          leftIcon={{type: 'font-awesome', name: 'chevron-left'}}
-        />
-        <Button title="Sign in!" onPress={this._signInAsync} />
-      </View>
-    </View>
+
+        <ViewElement >
+          <View style={{margin: 20}}>
+            <InputLogin
+                placeholder='Email'
+                inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderTopWidth: 1, borderBottomWidth: 0,
+                  borderTopEndRadius: 5, borderTopStartRadius: 5
+                }}
+            />
+
+            <InputLogin
+                placeholder="Password"
+                inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
+                  borderBottomEndRadius: 5, borderBottomStartRadius: 5}}
+            />
+            <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync()} />
+
+            <View style={{width: '100%', marginVertical: 10}}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={styles(theme).lineStyle}/>
+                <Text style={{color: theme.colors.grey5, marginHorizontal: 10}}>OR</Text>
+                <View style={styles(theme).lineStyle}/>
+              </View>
+            </View>
+
+
+            <Button
+                type="clear"
+                titleStyle={{color: theme.colors.primary}}
+                containerStyle={{marginTop: 20, marginHorizontal: 10, }}
+                title="Sign up" onPress={() => _signInAsync()} />
+          </View>
+
+
+
+
+        </ViewElement>
+      </SafeAreaView>
   );
 }
 
+const styles =  (props) => StyleSheet.create({
+
+  wrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lineStyle: {
+    width: windowWidth/5,
+    borderWidth: 0.3,
+    height: 0,
+    borderColor: props.colors.grey5
+  }
+});
