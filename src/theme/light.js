@@ -7,7 +7,7 @@
 // };
 export default {
   colors: {
-    primary: '#149191',
+    primary: '#9b39a4',
     secondary: "#FFFFFF",
     success: "#F2AC21",
     error: "#54B5B5",

@@ -48,13 +48,13 @@ import theme from './src/theme/theme';
 
 // pluck values from your `GoogleService-Info.plist` you created on the firebase console
 const iosConfig = {
-  clientId: 'x',
-  appId: 'x',
-  apiKey: 'x',
-  databaseURL: 'x',
-  storageBucket: 'x',
+  clientId: '73973030716-nlqa78crs59gkompb2ndlp15goprf9d9.apps.googleusercontent.com',
+  appId: '1:73973030716:ios:cfb951759afe10e2810839',
+  apiKey: 'AIzaSyDl4ew34oHmENXXiNqR6xBegaSpL-YbWwM',
+  databaseURL: 'https://memoriae-e6149.firebaseio.com',
+  storageBucket: 'memoriae-e6149.appspot.com',
   messagingSenderId: 'x',
-  projectId: 'x',
+  projectId: 'memoriae-e6149',
 
   // enable persistence by adding the below flag
   persistence: true,
@@ -74,7 +74,7 @@ const androidConfig = {
   persistence: true,
 };
 
-firebase.initializeApp(iosConfig);
+//firebase.initializeApp(iosConfig);
 const persistedReducer = persistReducer(
     {
       key: 'root',

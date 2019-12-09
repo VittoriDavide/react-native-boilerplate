@@ -4,9 +4,11 @@ import {createStackNavigator} from 'react-navigation-stack';
 import MainTabNavigator from './MainTabNavigator';
 
 import {SignInScreen} from '../screens/SignInScreen';
+import {SignUpScreen} from '../screens/SignUpScreen';
+
 import {AuthLoadingScreen} from '../screens/AuthLoadingScreen';
 
-const AuthStack = createStackNavigator({SignIn: SignInScreen},
+const AuthStack = createStackNavigator({signIn: SignInScreen, signUp: SignUpScreen, },
     {
         headerMode: 'none',
         navigationOptions: {
