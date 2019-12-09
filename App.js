@@ -46,35 +46,6 @@ import { ThemeProvider, Button } from 'react-native-elements';
 
 import theme from './src/theme/theme';
 
-// pluck values from your `GoogleService-Info.plist` you created on the firebase console
-const iosConfig = {
-  clientId: '73973030716-nlqa78crs59gkompb2ndlp15goprf9d9.apps.googleusercontent.com',
-  appId: '1:73973030716:ios:cfb951759afe10e2810839',
-  apiKey: 'AIzaSyDl4ew34oHmENXXiNqR6xBegaSpL-YbWwM',
-  databaseURL: 'https://memoriae-e6149.firebaseio.com',
-  storageBucket: 'memoriae-e6149.appspot.com',
-  messagingSenderId: 'x',
-  projectId: 'memoriae-e6149',
-
-  // enable persistence by adding the below flag
-  persistence: true,
-};
-
-// pluck values from your `google-services.json` file you created on the firebase console
-const androidConfig = {
-  clientId: 'x',
-  appId: 'x',
-  apiKey: 'x',
-  databaseURL: 'x',
-  storageBucket: 'x',
-  messagingSenderId: 'x',
-  projectId: 'x',
-
-  // enable persistence by adding the below flag
-  persistence: true,
-};
-
-//firebase.initializeApp(iosConfig);
 const persistedReducer = persistReducer(
     {
       key: 'root',
@@ -99,7 +70,7 @@ i18n.locale = RNLocalize.getLocales()[0].languageCode;
 
 const App: () => React$Node = () => {
   return (
-      <ThemeProvider theme={theme('dark')}>
+      <ThemeProvider theme={theme('light')}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persist}>
             <StatusBar barStyle="light-content" />

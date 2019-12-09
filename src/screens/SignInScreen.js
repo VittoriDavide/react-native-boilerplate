@@ -7,7 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 import {Button, Image, Input} from 'react-native-elements';
 import authFirebase, {firebase} from '@react-native-firebase/auth';
@@ -18,7 +19,6 @@ import {DismissKeyboardView} from '../components/DismissKeyboardHOC';
 
 import {Dimensions} from "react-native";
 import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import auth, {
   AppleButton,
   AppleAuthError,
@@ -193,73 +193,72 @@ export function SignInScreen(props) {
   }, []);
 
   useEffect(() => {
-    return auth.onCredentialRevoked(async () => {
-      console.warn('Credential Revoked');
-      fetchAndUpdateCredentialState(updateCredentialStateForUser).catch(error =>
-          updateCredentialStateForUser(`Error: ${error.code}`),
-      );
-    });
+    if(auth.isSupported){
+      return auth.onCredentialRevoked(async () => {
+        console.warn('Credential Revoked');
+        fetchAndUpdateCredentialState(updateCredentialStateForUser).catch(error =>
+            updateCredentialStateForUser(`Error: ${error.code}`),
+        );
+      });
+    }
   }, []);
 
   return (
       <SafeAreaView style={{backgroundColor: theme.colors.secondary}}>
         <DismissKeyboardView>
-        <ViewElement>
-          <View style={{alignSelf: "center",marginTop: 20}}>
-            {/*<Image source={require('../images/app5.png')} style={{  width: 300, height: 116 }}/>*/}
-            <Image source={require('../images/memoriae-white.png')} style={{  width: 120, height: 120 }}/>
+          <ViewElement>
+            <View style={{alignSelf: "center",marginTop: 20}}>
+              <Image source={require('../images/app5.png')} style={{  width: 300, height: 116 }}/>
+              {/*<Image source={require('../images/memoriae-white.png')} style={{  width: 120, height: 120 }}/>*/}
 
-          </View>
-          <View style={{margin: 20}}>
-
-            <Input
-                inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
-                placeholderStyle={{color: theme.colors.grey5}}
-                placeholderTextColor={theme.colors.grey3}
-                labelStyle={{color: theme.colors.grey5}}
-                onChangeText={text => setEmail(text)}
-                ref={emailInput}
-                placeholder='Email'
-                inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderTopWidth: 1, borderBottomWidth: 0,
-                  borderTopEndRadius: 5, borderTopStartRadius: 5,borderColor: theme.colors.grey3, padding: 5
-                }}
-            />
-
-            <Input
-                inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
-                placeholderStyle={{color: theme.colors.grey5}}
-                placeholderTextColor={theme.colors.grey3}
-                labelStyle={{color: theme.colors.grey5}}
-                onChangeText={text => setPassword(text)}
-                ref={passwordInput}
-                placeholder="Password"
-                secureTextEntry
-                inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
-                  borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
-            />
-
-            <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
-            {auth.isSupported && <AppleButton
-                style={styles(theme).appleButton}
-                cornerRadius={5}
-                buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-                buttonType={AppleButton.Type.SIGN_IN}
-                onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
-            />}
-            <View style={{width: '100%', marginVertical: 10}}>
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <View style={styles(theme).lineStyle}/>
-                <Text style={{color: theme.colors.grey5, marginHorizontal: 10}}>OR</Text>
-                <View style={styles(theme).lineStyle}/>
-              </View>
             </View>
-            <Button
-                type="clear"
-                titleStyle={{color: theme.colors.primary}}
-                containerStyle={{marginTop: 20, marginHorizontal: 10, }}
-                title="Sign up" onPress={() => navigation.navigate("signUp")} />
-          </View>
-        </ViewElement>
+            <View style={{margin: 20}}>
+              <Input
+                  inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
+                  placeholderStyle={{color: theme.colors.grey5}}
+                  placeholderTextColor={theme.colors.grey3}
+                  labelStyle={{color: theme.colors.grey5}}
+                  onChangeText={text => setEmail(text)}
+                  ref={emailInput}
+                  placeholder='Email'
+                  inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderTopWidth: 1, borderBottomWidth: 0,
+                    borderTopEndRadius: 5, borderTopStartRadius: 5,borderColor: theme.colors.grey3, padding: 5
+                  }}
+              />
+              <Input
+                  inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
+                  placeholderStyle={{color: theme.colors.grey5}}
+                  placeholderTextColor={theme.colors.grey3}
+                  labelStyle={{color: theme.colors.grey5}}
+                  onChangeText={text => setPassword(text)}
+                  ref={passwordInput}
+                  placeholder="Password"
+                  secureTextEntry
+                  inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
+                    borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
+              />
+              <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
+              {auth.isSupported ? <AppleButton
+                  style={styles(theme).appleButton}
+                  cornerRadius={5}
+                  buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                  buttonType={AppleButton.Type.SIGN_IN}
+                  onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
+              />: null}
+              <View style={{width: '100%', marginVertical: 10}}>
+                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  <View style={styles(theme).lineStyle}/>
+                  <Text style={{color: theme.colors.grey5, marginHorizontal: 10}}>OR</Text>
+                  <View style={styles(theme).lineStyle}/>
+                </View>
+              </View>
+              <Button
+                  type="clear"
+                  titleStyle={{color: theme.colors.primary}}
+                  containerStyle={{marginTop: 20, marginHorizontal: 10, }}
+                  title="Sign up" onPress={() => navigation.navigate("signUp")} />
+            </View>
+          </ViewElement>
         </DismissKeyboardView>
       </SafeAreaView>
   );
