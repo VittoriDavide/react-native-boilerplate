@@ -18,7 +18,7 @@ import InputLogin from '../components/InputLogin';
 import {DismissKeyboardView} from '../components/DismissKeyboardHOC';
 
 import {Dimensions} from "react-native";
-import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import auth, {
   AppleButton,
   AppleAuthError,
@@ -160,6 +160,31 @@ export function SignInScreen(props) {
     }
   };
 
+  let _signInGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      this.setState({ userInfo });
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.warn("google canceled")
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.warn("google in progress")
+
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.warn("google service not available")
+
+      } else {
+        // some other error happened
+        console.warn("google error", error)
+
+      }
+    }
+  };
+
 
   // Set an initilizing state whilst Firebase connects
   const [initilizing, setInitilizing] = useState(true);
@@ -238,13 +263,20 @@ export function SignInScreen(props) {
                     borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
               />
               <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
+
               {auth.isSupported ? <AppleButton
                   style={styles(theme).appleButton}
                   cornerRadius={5}
                   buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                   buttonType={AppleButton.Type.SIGN_IN}
                   onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
-              />: null}
+              />: <GoogleSigninButton
+                  style={{ width: 192, height: 48, alignSelf: "center", marginTop: 20}}
+                  size={GoogleSigninButton.Size.Wide}
+                  color={GoogleSigninButton.Color.Dark}
+                  onPress={() => _signInGoogle()}
+                   />}
+
               <View style={{width: '100%', marginVertical: 10}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                   <View style={styles(theme).lineStyle}/>
