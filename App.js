@@ -47,7 +47,12 @@ import { ThemeProvider, Button } from 'react-native-elements';
 import theme from './src/theme/theme';
 import { GoogleSignin } from '@react-native-community/google-signin';
 
-GoogleSignin.configure();
+// Change depending on project
+import {google} from './src/constants/google'
+
+
+GoogleSignin.configure(google);
+
 const persistedReducer = persistReducer(
     {
       key: 'root',

@@ -164,7 +164,11 @@ export function SignInScreen(props) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      this.setState({ userInfo });
+      const { accessToken, idToken } = userInfo;
+      const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+      await firebase.auth().signInWithCredential(credential);
+
+      console.log(userInfo)
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -172,15 +176,12 @@ export function SignInScreen(props) {
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
         console.warn("google in progress")
-
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
         console.warn("google service not available")
-
       } else {
         // some other error happened
         console.warn("google error", error)
-
       }
     }
   };
@@ -191,6 +192,7 @@ export function SignInScreen(props) {
   const [user, setUser] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isEmailValid, setEmailValidity] = useState(true);
   const navigation = useContext(NavigationContext);
 
 
@@ -249,6 +251,10 @@ export function SignInScreen(props) {
                   inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderTopWidth: 1, borderBottomWidth: 0,
                     borderTopEndRadius: 5, borderTopStartRadius: 5,borderColor: theme.colors.grey3, padding: 5
                   }}
+                  pattern={[
+                    '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
+                  ]}
+                  onValidation={isValid => setEmailValidity(isValid)}
               />
               <Input
                   inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
@@ -261,6 +267,8 @@ export function SignInScreen(props) {
                   secureTextEntry
                   inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
                     borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
+                  errorMessage={!isEmailValid ? "Mail not Valid" : ""}
+
               />
               <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
 
