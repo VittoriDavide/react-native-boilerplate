@@ -135,17 +135,25 @@ export function SignInScreen(props) {
   let emailInput = React.createRef();
   let passwordInput = React.createRef();
 
-  // var _signInAsync = async () => {
-  //   await AsyncStorage.setItem('userToken', 'abc');
-  //   //this.props.navigation.navigate('App');
-  //   console.log(replaceTheme)
-  //   replaceTheme(theme)
-  // };
+  // Set an initilizing state whilst Firebase connects
+  const [initilizing, setInitilizing] = useState(true);
+  const [user, setUser] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isEmailValid, setEmailValidity] = useState(false);
+  const [isPasswordValid, setPasswordValidity] = useState(false);
+
+  const navigation = useContext(NavigationContext);
+
 
 
   let _signInAsync = async (email, password) => {
     try {
-      await authFirebase().signInWithEmailAndPassword(email, password);
+      if(isEmailValid && isPasswordValid){
+        await authFirebase().signInWithEmailAndPassword(email, password);
+      }else{
+        throw new Error("Passoword or Email is not correct");
+      }
     } catch (e) {
       emailInput.current.shake();
       passwordInput.current.shake();
@@ -187,13 +195,7 @@ export function SignInScreen(props) {
   };
 
 
-  // Set an initilizing state whilst Firebase connects
-  const [initilizing, setInitilizing] = useState(true);
-  const [user, setUser] = useState();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmailValid, setEmailValidity] = useState(true);
-  const navigation = useContext(NavigationContext);
+
 
 
   // Handle user state changes
@@ -245,45 +247,45 @@ export function SignInScreen(props) {
                   placeholderStyle={{color: theme.colors.grey5}}
                   placeholderTextColor={theme.colors.grey3}
                   labelStyle={{color: theme.colors.grey5}}
-                  onChangeText={text => setEmail(text)}
+                  onChangeText={text =>{
+                    setEmail(text)
+                    setEmailValidity((/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(text)))
+                  } }
                   ref={emailInput}
                   placeholder='Email'
                   inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderTopWidth: 1, borderBottomWidth: 0,
                     borderTopEndRadius: 5, borderTopStartRadius: 5,borderColor: theme.colors.grey3, padding: 5
                   }}
-                  pattern={[
-                    '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
-                  ]}
-                  onValidation={isValid => setEmailValidity(isValid)}
+
               />
               <Input
                   inputStyle={{color: theme.colors.grey5, padding: 5, paddingHorizontal: 10, fontSize: 15}}
                   placeholderStyle={{color: theme.colors.grey5}}
                   placeholderTextColor={theme.colors.grey3}
                   labelStyle={{color: theme.colors.grey5}}
-                  onChangeText={text => setPassword(text)}
+                  onChangeText={text =>{
+                    setPassword(text)
+                    setPasswordValidity((/^.+$/i.test(text)))
+                  }}
                   ref={passwordInput}
                   placeholder="Password"
                   secureTextEntry
                   inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
                     borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
-                  errorMessage={!isEmailValid ? "Mail not Valid" : ""}
-
               />
               <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
-
-              {auth.isSupported ? <AppleButton
+              {!auth.isSupported ? <AppleButton
                   style={styles(theme).appleButton}
                   cornerRadius={5}
                   buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-                  buttonType={AppleButton.Type.SIGN_IN}
+                  buttonType={AppleButton.Type.CONTINUE}
                   onPress={() => onAppleButtonPress(updateCredentialStateForUser)}
               />: <GoogleSigninButton
                   style={{ width: 192, height: 48, alignSelf: "center", marginTop: 20}}
                   size={GoogleSigninButton.Size.Wide}
                   color={GoogleSigninButton.Color.Dark}
                   onPress={() => _signInGoogle()}
-                   />}
+              />}
 
               <View style={{width: '100%', marginVertical: 10}}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -296,7 +298,10 @@ export function SignInScreen(props) {
                   type="clear"
                   titleStyle={{color: theme.colors.primary}}
                   containerStyle={{marginTop: 20, marginHorizontal: 10, }}
-                  title="Sign up" onPress={() => navigation.navigate("signUp")} />
+                  title="Sign up" onPress={() => {
+                    navigation.navigate("signUp");
+                    passwordInput.current.clear();
+              }} />
             </View>
           </ViewElement>
         </DismissKeyboardView>
