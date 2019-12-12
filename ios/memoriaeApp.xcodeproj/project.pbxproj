@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* memoriaeAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* memoriaeAppTests.m */; };
-		1106329D239D655300DAAF54 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1106329C239D655300DAAF54 /* GoogleService-Info.plist */; };
+		11D2BE6323A22BEB00C9CC31 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11D2BE6223A22BEB00C9CC31 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -47,7 +47,7 @@
 		00E356F21AD99517003FC87E /* memoriaeAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = memoriaeAppTests.m; sourceTree = "<group>"; };
 		045AC200EECE6DD8614A6576 /* Pods-memoriaeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-memoriaeApp.debug.xcconfig"; path = "Target Support Files/Pods-memoriaeApp/Pods-memoriaeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		1106329B239D543000DAAF54 /* memoriaeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = memoriaeApp.entitlements; path = memoriaeApp/memoriaeApp.entitlements; sourceTree = "<group>"; };
-		1106329C239D655300DAAF54 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		11D2BE6223A22BEB00C9CC31 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* memoriaeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = memoriaeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = memoriaeApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = memoriaeApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		13B07FAE1A68108700A75B9A /* memoriaeApp */ = {
 			isa = PBXGroup;
 			children = (
-				1106329C239D655300DAAF54 /* GoogleService-Info.plist */,
+				11D2BE6223A22BEB00C9CC31 /* GoogleService-Info.plist */,
 				1106329B239D543000DAAF54 /* memoriaeApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -347,8 +347,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				11D2BE6323A22BEB00C9CC31 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				1106329D239D655300DAAF54 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

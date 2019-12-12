@@ -28,6 +28,7 @@ import auth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
 import {NavigationContext} from "react-navigation";
+import messaging from '@react-native-firebase/messaging';
 
 
 let windowHeight = Dimensions.get('window').height;
@@ -144,8 +145,25 @@ export function SignInScreen(props) {
   const [isPasswordValid, setPasswordValidity] = useState(false);
 
   const navigation = useContext(NavigationContext);
+  console.log("hh");
+  let _getToken = async () => {
+    console.log("hello")
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      // user has a device token
+      console.log(fcmToken)
+    } else {
+      // user doesn't have a device token yet
+      console.log("no")
 
+    }
+  };
 
+  console.log(messaging().getToken());
+
+  messaging().onTokenRefresh((token) => {
+    console.log(token)
+  });
 
   let _signInAsync = async (email, password) => {
     try {
@@ -273,8 +291,12 @@ export function SignInScreen(props) {
                   inputContainerStyle={{borderRightWidth: 1, borderLeftWidth: 1, borderBottomWidth: 1, borderTopWidth: 1,
                     borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
               />
-              <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => _signInAsync(email, password)} />
-              {!auth.isSupported ? <AppleButton
+              <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => {
+                _getToken()
+
+                //_signInAsync(email, password);
+              }} />
+              {auth.isSupported ? <AppleButton
                   style={styles(theme).appleButton}
                   cornerRadius={5}
                   buttonStyle={AppleButton.Style.WHITE_OUTLINE}
