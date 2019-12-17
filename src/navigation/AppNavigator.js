@@ -22,6 +22,6 @@ export default createAppContainer(
     // Read more at https://reactnavigation.org/docs/en/auth-flow.html
     AuthLoading: AuthLoadingScreen,
     Auth: AuthStack,
-    // Main: MainTabNavigator,
+    Main: MainTabNavigator,
   }),
 );

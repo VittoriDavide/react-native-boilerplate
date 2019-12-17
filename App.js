@@ -50,7 +50,7 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 // Change depending on project
 import {google} from './src/constants/google'
 
-
+import crashlytics from '@react-native-firebase/crashlytics';
 GoogleSignin.configure(google);
 
 const persistedReducer = persistReducer(
@@ -63,6 +63,9 @@ const persistedReducer = persistReducer(
     rootReducer,
 );
 
+
+
+
 export const store = createStore(
     persistedReducer,
     {},
@@ -71,12 +74,15 @@ export const store = createStore(
 
 const persist = persistStore(store);
 
+
+
 i18n.fallbacks = true;
 i18n.translations = {en};
 i18n.locale = RNLocalize.getLocales()[0].languageCode;
 
 const App: () => React$Node = () => {
   return (
+
       <ThemeProvider theme={theme('light')}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persist}>

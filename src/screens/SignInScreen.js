@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage, SafeAreaView,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {Button, Image, Input} from 'react-native-elements';
 import authFirebase, {firebase} from '@react-native-firebase/auth';
 import { ThemeContext, withTheme } from 'react-native-elements';
@@ -29,6 +30,7 @@ import auth, {
 } from '@invertase/react-native-apple-authentication';
 import {NavigationContext} from "react-navigation";
 import messaging from '@react-native-firebase/messaging';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 
 let windowHeight = Dimensions.get('window').height;
@@ -53,6 +55,14 @@ async function fetchAndUpdateCredentialState(updateCredentialStateForUser) {
     }
   }
 }
+
+
+async function forceCrash() {
+  await firebase.crashlytics().setCrashlyticsCollectionEnabled(true);
+  crashlytics().log('Testing crash');
+  crashlytics().crash();
+}
+
 
 /**
  * Starts the Sign In flow.
@@ -155,7 +165,6 @@ export function SignInScreen(props) {
     } else {
       // user doesn't have a device token yet
       console.log("no")
-
     }
   };
 
@@ -168,7 +177,9 @@ export function SignInScreen(props) {
   let _signInAsync = async (email, password) => {
     try {
       if(isEmailValid && isPasswordValid){
-        await authFirebase().signInWithEmailAndPassword(email, password);
+        let userInfo = await authFirebase().signInWithEmailAndPassword(email, password);
+        await AsyncStorage.setItem("userToken", userInfo.user.uid);
+        this.props.navigation.navigate('Main');
       }else{
         throw new Error("Passoword or Email is not correct");
       }
@@ -292,9 +303,9 @@ export function SignInScreen(props) {
                     borderBottomEndRadius: 5, borderBottomStartRadius: 5, borderColor: theme.colors.grey3, padding: 5}}
               />
               <Button containerStyle={{marginTop: 20, marginHorizontal: 10}} title="Sign in" onPress={() => {
-                _getToken()
+                //_getToken()
 
-                //_signInAsync(email, password);
+                _signInAsync(email, password);
               }} />
               {auth.isSupported ? <AppleButton
                   style={styles(theme).appleButton}

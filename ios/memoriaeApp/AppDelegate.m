@@ -10,6 +10,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <Fabric/Fabric.h>
 
 @implementation AppDelegate
 
@@ -32,7 +33,8 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
   
   /// Firebase Configuration
   [FIRApp configure];
-  
+  [Fabric.sharedSDK setDebug:YES];
+
   [FIRMessaging messaging].delegate = self;
 
   ///Firebase Push Notifications
